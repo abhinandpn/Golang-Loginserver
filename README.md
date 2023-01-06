@@ -37,11 +37,11 @@ functions  :
 - func main
 
 Main-func Working
-    - http.HandleFunc("/", index)
-	- http.HandleFunc("/login-submit", loginHandler)
-	- http.HandleFunc("/login", login)
-	- http.HandleFunc("/logout", Logouthandler)
-	- http.ListenAndServe("localhost:8080", nil)
+- http.HandleFunc("/", index)
+- http.HandleFunc("/login-submit", loginHandler)
+- http.HandleFunc("/login", login)
+- http.HandleFunc("/logout", Logouthandler)
+- http.ListenAndServe("localhost:8080", nil)
 
 Func: init
 - Initializes the template by parsing the templates located in the "template/*.html" glob pattern.
