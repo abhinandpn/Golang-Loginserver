@@ -17,6 +17,11 @@ var tpl *template.Template
 // session storing
 var Store = sessions.NewCookieStore([]byte("session"))
 
+// setting max age of the session
+Store.Options = &sessions.Options{
+    MaxAge: 10, // 10 seconds
+}
+
 // template init
 func init() {
 	tpl = template.Must(template.ParseGlob("static/*.html"))
@@ -88,13 +93,13 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("username : ", username)
 	fmt.Println("password : ", password)
-	if userData["username"] == username && userData["password"] == password && r.Method == "POST" {
+		if userData["username"] == username && userData["password"] == password && r.Method == "POST" {
 
 		//session storing
 		session, _ := Store.Get(r, "started")
-
+		// setting max age of the session on per session basis
+		session.Options.MaxAge = 10 // 10 seconds
 		//storing the value
-
 		session.Values["username"] = username
 
 		//value moving to P.Hedder1
@@ -103,7 +108,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		//print the value
 		fmt.Println("Hedder 1 value : ", P.Header1)
 
-		//session savingf
+		//session saving
 		session.Save(r, w)
 
 		//print the session value
@@ -130,56 +135,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func Logouthandler(w http.ResponseWriter, r *http.Request) {
 	//clearing
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-	//session checking if its true
-	if P.Status == true {
-		session, _ := Store.Get(r, "started") //store
-		session.Options.MaxAge = -1           //session time decresing
-		session.Save(r, w)
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		P.Status = false //false returing
-		//if its false
-	} else if P.Status == false {
-		http.Redirect(w, r, "/login", http.StatusSeeOther) //redirecting
-	}
-}
-
-// session checking func
-func Middleware(w http.ResponseWriter, r *http.Request) bool { //bool value returning
-	session, _ := Store.Get(r, "started")  //session name
-	if session.Values["username"] == nil { //session value check
-		return false //returning value
-	}
-	P.Header1 = session.Values["username"] //session value
-	return true
-
-}
-
-// index func
-func index(w http.ResponseWriter, r *http.Request) {
-	ok := Middleware(w, r) //middleware check
-	if ok {
-		P.Status = true
-	}
-	filenamE := "index.html" //redirecting file name
-	err := tpl.ExecuteTemplate(w, filenamE, P)
-	if err != nil {
-		fmt.Println("error while parsing file", err) //error
-		return
-	}
-
-}
-
-var Username string
-
-// main
-func main() {
-	http.HandleFunc("/", index)
-	http.HandleFunc("/login-submit", loginHandler)
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", Logouthandler)
-	fmt.Println("server starts at localhost:8080")
-	if err := http.ListenAndServe("localhost:8080", nil); err != nil {
-		log.Fatal(err)
-	}
-
+	session, _ := Store.Get(r, "started")
+	session.Options.MaxAge = -1 // delete session
+	session.Save(r, w)
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
