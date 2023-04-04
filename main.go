@@ -146,7 +146,7 @@ func Logouthandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // session checking func user is logind or not
-func Middleware(w http.ResponseWriter, r *http.Request) bool { //bool value returning
+func Middleware(_ http.ResponseWriter, r *http.Request) bool { //bool value returning
 
 	session, _ := Store.Get(r, "started")  //session name
 	if session.Values["username"] == nil { //session value check
