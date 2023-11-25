@@ -12,9 +12,10 @@ require (
 require (
 	github.com/alessio/shellescape v1.4.1 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
 	golang.org/x/exp v0.0.0-20221208152030-732eee02a75a // indirect
-	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.3.8 // indirect
+	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 )
 
 // golang.org/x/sys  v0.1.0
